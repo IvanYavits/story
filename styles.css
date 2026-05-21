@@ -310,6 +310,11 @@ main {
   color: #8a5a00;
 }
 
+.tag.published {
+  background: #e5edff;
+  color: #244f9e;
+}
+
 .card-actions {
   display: flex;
   gap: 8px;
@@ -322,15 +327,6 @@ main {
 .danger {
   border-color: #ffd1d8;
   color: #9f2339;
-}
-
-.player-section iframe {
-  width: 100%;
-  min-height: 640px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: white;
-  box-shadow: var(--shadow);
 }
 
 .upload-section,
@@ -419,9 +415,5 @@ pre {
     grid-template-columns: 1fr;
     min-height: auto;
     padding-top: 34px;
-  }
-
-  .player-section iframe {
-    min-height: 520px;
   }
 }
