@@ -1,0 +1,11 @@
+{
+  "games": [
+    {
+      "id": "sample-castle",
+      "title": "Castle Door",
+      "description": "A tiny repository-hosted sample game. Use this folder format for permanent games.",
+      "level": "Beginner",
+      "url": "games/sample-castle/index.html"
+    }
+  ]
+}
