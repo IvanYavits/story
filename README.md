@@ -1,6 +1,6 @@
 # Text Quest Arcade
 
-A local website for collecting and playing interactive English text games.
+A website for collecting and playing interactive English text games.
 
 ## Run
 
@@ -16,11 +16,39 @@ Then open:
 http://127.0.0.1:5173
 ```
 
-## Add Games
+## Permanent Games
 
-Use the **Upload** section to add a standalone `.html` game. The site saves uploaded games in this browser with `localStorage`.
+Permanent games live in the repository under `games/`.
 
-That means the games stay on the same computer and browser. To share games between devices, the next version would need a server, database, and teacher/admin login.
+Use one folder per game:
+
+```text
+games/
+  my-game/
+    index.html
+    style.css
+    script.js
+    images/
+      background.png
+```
+
+Then add the game to `games/manifest.json`:
+
+```json
+{
+  "id": "my-game",
+  "title": "My Game",
+  "description": "A short English text adventure.",
+  "level": "Beginner",
+  "url": "games/my-game/index.html"
+}
+```
+
+After the change is pushed to GitHub, the game appears on the site and does not disappear.
+
+## Local Preview
+
+Use the **Upload** section to test a standalone `.html` game on this computer. Local uploads are saved in this browser with `localStorage`; they are not published to GitHub.
 
 ## Game Template
 
