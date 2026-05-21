@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Quest Arcade</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#library" aria-label="Text Quest Arcade home">
+        <span class="brand-mark">TQ</span>
+        <span>
+          <strong>Text Quest Arcade</strong>
+          <small>Interactive English text games</small>
+        </span>
+      </a>
+      <nav class="nav">
+        <a href="#library">Games</a>
+        <a href="#upload">Upload</a>
+        <a href="#builder">Template</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">HTML game library</p>
+          <h1 id="hero-title">Upload, collect, and play English text adventures.</h1>
+          <p>
+            Add standalone HTML games, launch them in the arcade, and keep your
+            collection saved in this browser.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#upload">Upload game</a>
+            <a class="button secondary" href="#library">Open library</a>
+          </div>
+        </div>
+        <div class="terminal-art" aria-hidden="true">
+          <div class="terminal-line prompt">&gt; start adventure</div>
+          <div class="terminal-line">You wake inside a library of living books.</div>
+          <div class="terminal-line">Choose: READ / RUN / ASK</div>
+          <div class="terminal-line cursor">_</div>
+        </div>
+      </section>
+
+      <section id="library" class="section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Library</p>
+            <h2>Game shelf</h2>
+          </div>
+          <button id="clear-games" class="icon-button" type="button" title="Remove uploaded games" aria-label="Remove uploaded games">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="games-grid" class="games-grid" aria-live="polite"></div>
+      </section>
+
+      <section id="player" class="section player-section" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Now playing</p>
+            <h2 id="player-title">Game</h2>
+          </div>
+          <button id="close-player" class="button secondary" type="button">Close</button>
+        </div>
+        <iframe
+          id="game-frame"
+          title="Selected text game"
+          sandbox="allow-scripts allow-forms allow-modals allow-pointer-lock"
+        ></iframe>
+      </section>
+
+      <section id="upload" class="section upload-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Upload</p>
+            <h2>Add a new HTML game</h2>
+          </div>
+        </div>
+        <form id="upload-form" class="upload-form">
+          <label>
+            Game title
+            <input id="game-title" name="title" type="text" placeholder="Mystery at Moon Station" required />
+          </label>
+          <label>
+            Short description
+            <textarea id="game-description" name="description" rows="3" placeholder="A short interactive reading adventure for English learners." required></textarea>
+          </label>
+          <label>
+            Level
+            <select id="game-level" name="level">
+              <option value="Beginner">Beginner</option>
+              <option value="Elementary">Elementary</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </label>
+          <label class="file-drop" for="game-file">
+            <input id="game-file" name="file" type="file" accept=".html,text/html" required />
+            <span>Choose an HTML file</span>
+            <small id="file-name">Standalone .html games work best.</small>
+          </label>
+          <button class="button primary" type="submit">Add to library</button>
+          <p id="upload-status" class="status" role="status"></p>
+        </form>
+      </section>
+
+      <section id="builder" class="section template-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Template</p>
+            <h2>Starter game format</h2>
+          </div>
+          <button id="copy-template" class="button secondary" type="button">Copy</button>
+        </div>
+        <pre><code id="template-code"></code></pre>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
