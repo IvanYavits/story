@@ -101,10 +101,6 @@ const uploadForm = document.querySelector("#upload-form");
 const uploadStatus = document.querySelector("#upload-status");
 const fileInput = document.querySelector("#game-file");
 const fileName = document.querySelector("#file-name");
-const frame = document.querySelector("#game-frame");
-const player = document.querySelector("#player");
-const playerTitle = document.querySelector("#player-title");
-const closePlayer = document.querySelector("#close-player");
 const clearGames = document.querySelector("#clear-games");
 const templateCode = document.querySelector("#template-code");
 const copyTemplate = document.querySelector("#copy-template");
@@ -152,11 +148,6 @@ uploadForm.addEventListener("submit", async (event) => {
   uploadStatus.textContent = `"${newGame.title}" was added to the library.`;
   renderGames();
   location.hash = "library";
-});
-
-closePlayer.addEventListener("click", () => {
-  frame.removeAttribute("srcdoc");
-  player.hidden = true;
 });
 
 clearGames.addEventListener("click", () => {
@@ -223,10 +214,17 @@ function playGame(id) {
   const game = [...uploadedGames, ...demoGames].find((item) => item.id === id);
   if (!game) return;
 
-  playerTitle.textContent = game.title;
-  frame.srcdoc = game.content;
-  player.hidden = false;
-  player.scrollIntoView({ behavior: "smooth", block: "start" });
+  const gameFile = new Blob([game.content], { type: "text/html" });
+  const gameUrl = URL.createObjectURL(gameFile);
+  const gameWindow = window.open(gameUrl, "_blank", "noopener");
+
+  if (!gameWindow) {
+    uploadStatus.textContent = "Please allow pop-ups to open the game in a new tab.";
+    URL.revokeObjectURL(gameUrl);
+    return;
+  }
+
+  setTimeout(() => URL.revokeObjectURL(gameUrl), 60_000);
 }
 
 function deleteGame(id) {
