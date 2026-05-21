@@ -1,4 +1,5 @@
 const STORAGE_KEY = "textQuestArcade.games.v1";
+const MANIFEST_URL = "games/manifest.json";
 
 const starterTemplate = `<!doctype html>
 <html lang="en">
@@ -108,8 +109,10 @@ const copyTemplate = document.querySelector("#copy-template");
 templateCode.textContent = starterTemplate;
 
 let uploadedGames = loadUploadedGames();
+let publishedGames = [];
 
 renderGames();
+loadPublishedGames();
 
 fileInput.addEventListener("change", () => {
   const selectedFile = fileInput.files?.[0];
@@ -173,8 +176,30 @@ copyTemplate.addEventListener("click", async () => {
   }, 1400);
 });
 
+async function loadPublishedGames() {
+  try {
+    const response = await fetch(MANIFEST_URL, { cache: "no-store" });
+    if (!response.ok) return;
+
+    const manifest = await response.json();
+    publishedGames = Array.isArray(manifest.games)
+      ? manifest.games.map((game) => ({
+          id: `published-${game.id}`,
+          title: game.title,
+          description: game.description,
+          level: game.level,
+          source: "GitHub",
+          url: game.url
+        }))
+      : [];
+    renderGames();
+  } catch {
+    publishedGames = [];
+  }
+}
+
 function renderGames() {
-  const allGames = [...uploadedGames, ...demoGames];
+  const allGames = [...publishedGames, ...uploadedGames, ...demoGames];
   gamesGrid.innerHTML = "";
 
   allGames.forEach((game) => {
@@ -186,13 +211,13 @@ function renderGames() {
         <p>${escapeHtml(game.description)}</p>
         <div class="meta-row">
           <span class="tag">${escapeHtml(game.level)}</span>
-          <span class="tag ${game.source === "Demo" ? "demo" : ""}">${escapeHtml(game.source)}</span>
+          <span class="tag ${getSourceClass(game.source)}">${escapeHtml(game.source)}</span>
         </div>
       </div>
       <div class="card-actions">
         <button class="button primary" type="button" data-play="${game.id}">Play</button>
         ${
-          game.source === "Demo"
+          game.source === "Demo" || game.source === "GitHub"
             ? ""
             : `<button class="button secondary danger" type="button" data-delete="${game.id}">Delete</button>`
         }
@@ -211,8 +236,16 @@ function renderGames() {
 }
 
 function playGame(id) {
-  const game = [...uploadedGames, ...demoGames].find((item) => item.id === id);
+  const game = [...publishedGames, ...uploadedGames, ...demoGames].find((item) => item.id === id);
   if (!game) return;
+
+  if (game.url) {
+    const gameWindow = window.open(game.url, "_blank", "noopener");
+    if (!gameWindow) {
+      uploadStatus.textContent = "Please allow pop-ups to open the game in a new tab.";
+    }
+    return;
+  }
 
   const gameFile = new Blob([game.content], { type: "text/html" });
   const gameUrl = URL.createObjectURL(gameFile);
@@ -243,6 +276,12 @@ function loadUploadedGames() {
 
 function saveUploadedGames() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(uploadedGames));
+}
+
+function getSourceClass(source) {
+  if (source === "Demo") return "demo";
+  if (source === "GitHub") return "published";
+  return "";
 }
 
 function createId() {
